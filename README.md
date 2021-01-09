@@ -33,3 +33,6 @@ Other things that may come at a later stage are:
 - [ ] Better microservices architecture patterns
 - [ ] Some sort of Azure integration
 - [ ] Some sort of GitHub CI/CD integration
+
+## contributions
+- VisualStudio.gitignore comes from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
