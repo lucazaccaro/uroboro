@@ -1,0 +1,34 @@
+﻿@page "/config"
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<h1 style="font-size:@Configuration["h1FontSize"]">
+    Configuration example
+</h1>
+
+<h3>Custom size is: @Configuration["size"]</h3>
+
+<h1>Memory configuration example</h1>
+
+<h2>General specifications</h2>
+
+<ul>
+    <li>Color: @Configuration["color"]</li>
+    <li>Type: @Configuration["type"]</li>
+</ul>
+
+<h2>Wheels</h2>
+
+<ul>
+    <li>Count: @Configuration["wheels:count"]</li>
+    <li>Brand: @Configuration["wheels:brand"]</li>
+    <li>Type: @Configuration["wheels:brand:type"]</li>
+    <li>Year: @Configuration["wheels:year"]</li>
+</ul>
+
+@code {
+    protected override void OnInitialized()
+    {
+        var wheelsSection = Configuration.GetSection("wheels");
+    }
+}
