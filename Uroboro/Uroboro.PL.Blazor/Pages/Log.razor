@@ -1,0 +1,16 @@
+﻿@page "/log"
+@using Microsoft.Extensions.Logging;
+@inject ILogger<Counter> logger;
+
+<h1>Logger</h1>
+
+<button class="btn btn-primary" @onclick="TestLog">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void TestLog()
+    {
+        logger.LogWarning("Someone has clicked me!");
+    }
+}
