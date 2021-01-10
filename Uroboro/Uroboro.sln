@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro", "Uroboro\Uroboro.csproj", "{28FA0511-6AC8-4A42-ABAE-006DA374F7EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro", "Uroboro\Uroboro.csproj", "{28FA0511-6AC8-4A42-ABAE-006DA374F7EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.PL.Blazor", "Uroboro.PL.Blazor\Uroboro.PL.Blazor.csproj", "{2CACFDD3-2A99-46D6-B915-4E9C2353E220}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.PL.Blazor", "Uroboro.PL.Blazor\Uroboro.PL.Blazor.csproj", "{2CACFDD3-2A99-46D6-B915-4E9C2353E220}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

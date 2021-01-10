@@ -1,0 +1,21 @@
+﻿@page "/Param/{Id:int}/{text?}"
+
+<h1>[Id: @Id] Blazor is @Text!</h1>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Text = Text ?? "fantastic";
+    }
+
+    protected override void OnParametersSet()
+    {
+        Text = Text ?? "versatile";
+    }
+}
