@@ -1,7 +1,10 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@inject IWebAssemblyHostEnvironment HostEnvironment
 
 <h1>Hello!</h1>
 <p>Welcome to <strong>Uroboro</strong>.</p>
+<p>Environment: @HostEnvironment.Environment</p>
 
 <img src="/images/uroboro.png" alt="uroboro" />
 
