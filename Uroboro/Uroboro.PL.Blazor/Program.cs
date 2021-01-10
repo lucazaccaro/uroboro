@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Uroboro.PL.Blazor.Services;
 
 namespace Uroboro.PL.Blazor
 {
@@ -17,6 +18,8 @@ namespace Uroboro.PL.Blazor
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+
+            builder.Services.AddSingleton<IBlazorService, BlazorService>();
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
@@ -44,7 +47,12 @@ namespace Uroboro.PL.Blazor
 
             builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
-            await builder.Build().RunAsync();
+            var host = builder.Build();
+            var blazorService = host.Services.GetRequiredService<IBlazorService>();
+            blazorService.Init();
+            await blazorService.InitAsync();
+
+            await host.RunAsync();
         }
     }
 }

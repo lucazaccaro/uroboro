@@ -1,0 +1,25 @@
+﻿@using Models;
+@using Services
+@inject IBlazorService BlazorService;
+@page "/service"
+
+<h3>Service</h3>
+
+@if (items != null)
+{
+    <ul>
+        @foreach (var item in items)
+        {
+            <li>@item.Title (@item.IsDone)</li>
+        }
+    </ul>
+}
+
+@code {
+    private IReadOnlyList<TodoItem> items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await BlazorService.GetAsync();
+    }
+}
