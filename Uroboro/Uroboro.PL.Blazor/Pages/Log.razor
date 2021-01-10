@@ -1,6 +1,6 @@
 ﻿@page "/log"
 @using Microsoft.Extensions.Logging;
-@inject ILogger<Counter> logger;
+@inject ILoggerFactory LoggerFactory
 
 <h1>Logger</h1>
 
@@ -11,6 +11,7 @@
 
     private void TestLog()
     {
+        var logger = LoggerFactory.CreateLogger<Log>();
         logger.LogWarning("Someone has clicked me!");
     }
 }
