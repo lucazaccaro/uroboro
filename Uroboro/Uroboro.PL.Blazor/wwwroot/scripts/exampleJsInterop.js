@@ -6,7 +6,7 @@
         document.getElementById('welcome').innerText = welcomeMessage;
     },
     returnArrayAsyncJs: function () {
-        DotNet.invokeMethodAsync('Uroboro', 'ReturnArrayAsync')
+        DotNet.invokeMethodAsync('Uroboro.PL.Blazor', 'ReturnArrayAsync')
             .then(data => {
                 data.push(4);
                 console.log(data);
@@ -21,7 +21,11 @@
     },
     focusElement: function (element) {
         element.focus();
-    }
+    },
+    
 };
 
+function updateMessageCallerJS(name) {
+    DotNet.invokeMethodAsync('Uroboro.PL.Blazor', 'UpdateMessageCaller', name);
+}
 console.log('loaded');
