@@ -25,6 +25,8 @@ namespace Uroboro.PL.Blazor
 
             builder.Services.AddHttpClient("ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
 
+            builder.Services.AddHttpClient<WeatherForecastHttpClient>(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+
             var http = new HttpClient()
             {
                 BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)

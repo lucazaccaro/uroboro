@@ -1,6 +1,7 @@
 ﻿@page "/fetchdata"
 @inject HttpClient Http
 @inject IHttpClientFactory ClientFactory
+@inject WeatherForecastHttpClient TypedHttp
 
 <h1>Weather forecast</h1>
 
@@ -36,6 +37,7 @@ else
 }
 
 @code {
+    private WeatherForecast[] forecasts3;
     private WeatherForecast[] forecasts2;
 
     private WeatherForecast[] forecasts;
@@ -48,12 +50,14 @@ else
         {
             forecasts2 = await client.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.StackTrace);
         }
         // forecasts2 = await client.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+
+        forecasts3 = await TypedHttp.GetForecastAsync();
     }
 
     public class WeatherForecast
