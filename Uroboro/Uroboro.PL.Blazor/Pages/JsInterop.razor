@@ -3,6 +3,8 @@
 
 <h3>JsInterop</h3>
 
+<h2>Invoke JavaScript functions from .NET methods</h2>
+
 <button type="button" class="btn btn-primary" @onclick="ConvertArray">
     Convert Array
 </button>
@@ -13,20 +15,45 @@
     </span>
 </p>
 
+<button type="button" class="btn btn-primary" @onclick="TriggerJsPrompt">
+    Trigger JavaScript Prompt
+</button>
+
+<h3 id="welcome" style="color:green;font-style:italic"></h3>
+
+<input @ref="username" />
+
 @code {
     private MarkupString convertedText = new MarkupString("Select the <b>Convert Array</b> button.");
+    ElementReference username;
 
     private uint[] quoteArray = new uint[]
-    {
+{
         60, 101, 109, 62, 67, 97, 110, 39, 116, 32, 115, 116, 111, 112, 32,
         116, 104, 101, 32, 115, 105, 103, 110, 97, 108, 44, 32, 77, 97,
         108, 46, 60, 47, 101, 109, 62, 32, 45, 32, 77, 114, 46, 32, 85, 110,
         105, 118, 101, 114, 115, 101, 10, 10,
-    };
+        };
 
     private async Task ConvertArray()
     {
         var text = await JS.InvokeAsync<string>("convertArray", quoteArray);
         convertedText = new MarkupString(text);
+    }
+
+    public async Task TriggerJsPrompt()
+    {
+        await JS.InvokeVoidAsync(
+            "exampleJsFunctions.focusElement", username);
+
+        await JSRuntimeExtensions.InvokeVoidAsync(JS, "exampleJsFunctions.alertVoid");
+
+        var name = await JS.InvokeAsync<string>(
+            "exampleJsFunctions.showPrompt",
+            "What's your name?");
+
+        await JS.InvokeVoidAsync(
+                "exampleJsFunctions.displayWelcome",
+                $"Hello {name}! Welcome to Blazor!");
     }
 }
