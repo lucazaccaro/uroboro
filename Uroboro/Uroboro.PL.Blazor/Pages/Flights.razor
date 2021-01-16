@@ -1,0 +1,35 @@
+﻿@page "/flights"
+@using Models;
+
+<h3>Flights</h3>
+
+@*
+/*
+ * The following code will cause 25 sec UI freeze
+ */
+<div style="height:500px;overflow-y:scroll">
+    @foreach (var flight in allFlights)
+    {
+        <FlightSummary @key="flight" Flight="flight" />
+    }
+</div>
+*@
+
+<div style="height:500px;overflow-y:scroll">
+    <Virtualize Items="@allFlights" Context="flight">
+        <FlightSummary @key="flight" Flight="flight" />
+    </Virtualize>
+</div>
+
+@code {
+    private List<Flight> allFlights = new List<Flight>();
+
+    protected override Task OnInitializedAsync()
+    {
+        for(var i = 0; i < 100000; i++)
+        {
+            allFlights.Add(new Flight() { FlightId = i, Summary = "Summary" });
+        }
+        return base.OnInitializedAsync();
+    }
+}
