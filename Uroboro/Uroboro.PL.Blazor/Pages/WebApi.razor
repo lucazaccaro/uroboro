@@ -1,0 +1,46 @@
+﻿@page "/WebApi"
+@using System.Net.Http
+@using Models
+@inject HttpClient Http
+
+<h3>WebApi</h3>
+
+<input @bind="newItemName" placeholder="New Todo Item" />
+<button @onclick="@AddItem">Add</button>
+
+<input type="checkbox" @bind="editItem.IsComplete" />
+<input @bind="editItem.Name" />
+<button @onclick="@SaveItem">Save</button>
+
+<input @bind="id" />
+<button @onclick="@DeleteItem">Delete</button>
+
+@code {
+    private WebApiTodoItem[] todoItems;
+
+    protected override async Task OnInitializedAsync() =>
+        todoItems = await Http.GetFromJsonAsync<WebApiTodoItem[]>("api/TodoItems");
+
+    private string newItemName;
+
+    private async Task AddItem()
+    {
+        var addItem = new WebApiTodoItem { Name = newItemName, IsComplete = false };
+        await Http.PostAsJsonAsync("api/TodoItems", addItem);
+    }
+
+    private WebApiTodoItem editItem = new WebApiTodoItem();
+
+    private void EditItem(long id)
+    {
+        editItem = todoItems.Single(i => i.Id == id);
+    }
+
+    private async Task SaveItem() =>
+        await Http.PutAsJsonAsync($"api/TodoItems/{editItem.Id}", editItem);
+
+    private long id;
+
+    private async Task DeleteItem() =>
+        await Http.DeleteAsync($"api/TodoItems/{id}");
+}
