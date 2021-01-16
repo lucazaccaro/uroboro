@@ -28,7 +28,11 @@
     <li>Year: @Configuration["wheels:year"]</li>
 </ul>
 
+<PasswordField @bind-Password="password" />
+
 @code {
+    private string password;
+
     protected override void OnInitialized()
     {
         var wheelsSection = Configuration.GetSection("wheels");
