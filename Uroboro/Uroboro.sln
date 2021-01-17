@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.PL.Blazor", "Urobor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.SL.WebAPI", "Uroboro.SL.WebAPI\Uroboro.SL.WebAPI.csproj", "{B79B0175-6102-47AF-B32C-FFD8399085F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.Common.Models", "Uroboro.Common.Models\Uroboro.Common.Models.csproj", "{BBB00760-D5F2-4EAE-831F-B99E8DB1068B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B79B0175-6102-47AF-B32C-FFD8399085F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B79B0175-6102-47AF-B32C-FFD8399085F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B79B0175-6102-47AF-B32C-FFD8399085F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBB00760-D5F2-4EAE-831F-B99E8DB1068B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB00760-D5F2-4EAE-831F-B99E8DB1068B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB00760-D5F2-4EAE-831F-B99E8DB1068B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB00760-D5F2-4EAE-831F-B99E8DB1068B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
