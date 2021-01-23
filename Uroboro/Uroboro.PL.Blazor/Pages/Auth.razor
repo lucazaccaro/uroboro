@@ -1,6 +1,7 @@
 ﻿@page "/auth"
 @using Microsoft.Extensions.Configuration
 @using System.Net.Http
+@using System.Net.Http.Headers
 @using System.Net.Http.Json
 @using System.Text.Json
 @using Uroboro.Common.Models
@@ -32,17 +33,22 @@
 <table style="max-width: 66%;">
     <tr>
         <td>Token:</td>
-        <td>@token</td>
+        <td style="overflow-wrap: break-word;">@token</td>
     </tr>
     <tr>
         <td>Received at:</td>
-        <td style="overflow-wrap: break-word;">@tokenReceivedAt</td>
+        <td>@tokenReceivedAt</td>
     </tr>
     <tr>
         <td></td>
         <td><button @onclick="@RemoveToken">Remove Token</button></td>
     </tr>
 </table>
+
+<h3>Secure APIs</h3>
+
+<button @onclick="SecureGet">GET</button>
+<button @onclick="SecurePost">POST</button>
 
 @code {
     private AuthData authData = new AuthData();
@@ -83,5 +89,63 @@
     private void RemoveToken()
     {
         this.token = null;
+    }
+
+    private async void SecureGet()
+    {
+        var requestMessage = new HttpRequestMessage()
+        {
+            Method = new HttpMethod("GET"),
+            RequestUri = new Uri($"{Configuration["WebApiUri"]}Secure")
+        };
+
+        requestMessage.Headers.Authorization =
+            new AuthenticationHeaderValue("Bearer", this.token);
+
+        requestMessage.Headers.TryAddWithoutValidation(
+            "x-custom-header", "value");
+
+        try
+        {
+            var response = await Http.SendAsync(requestMessage);
+            var responseStatusCode = response.StatusCode;
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            this.authResponse = responseStatusCode == System.Net.HttpStatusCode.OK ? responseBody : responseStatusCode.ToString();
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            this.authResponse = $"An error occurred: {ex.StackTrace}";
+        }
+    }
+
+    private async void SecurePost()
+    {
+        var requestMessage = new HttpRequestMessage()
+        {
+            Method = new HttpMethod("POST"),
+            RequestUri = new Uri($"{Configuration["WebApiUri"]}Secure")
+        };
+
+        requestMessage.Headers.Authorization =
+            new AuthenticationHeaderValue("Bearer", this.token);
+
+        requestMessage.Headers.TryAddWithoutValidation(
+            "x-custom-header", "value");
+
+        try
+        {
+            var response = await Http.SendAsync(requestMessage);
+            var responseStatusCode = response.StatusCode;
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            this.authResponse = responseStatusCode == System.Net.HttpStatusCode.OK ? responseBody : responseStatusCode.ToString();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            this.authResponse = $"An error occurred: {ex.StackTrace}";
+        }
     }
 }
