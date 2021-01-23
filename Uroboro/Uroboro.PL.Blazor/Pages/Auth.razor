@@ -1,0 +1,87 @@
+﻿@page "/auth"
+@using Microsoft.Extensions.Configuration
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Text.Json
+@using Uroboro.Common.Models
+@inject HttpClient Http
+@inject IConfiguration Configuration
+
+<h3>Auth</h3>
+
+<EditForm Model="@authData" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        <label>
+            Username:
+            <InputText @bind-Value="authData.Username" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Password:
+            <InputText type="password" @bind-Value="authData.Password" />
+        </label>
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+
+<span>@authResponse</span>
+
+<table style="max-width: 66%;">
+    <tr>
+        <td>Token:</td>
+        <td>@token</td>
+    </tr>
+    <tr>
+        <td>Received at:</td>
+        <td style="overflow-wrap: break-word;">@tokenReceivedAt</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button @onclick="@RemoveToken">Remove Token</button></td>
+    </tr>
+</table>
+
+@code {
+    private AuthData authData = new AuthData();
+    private string token = null;
+    private DateTime tokenReceivedAt = DateTime.Now;
+    private string authResponse = null;
+
+    private async void HandleValidSubmit()
+    {
+        using var response = await Http.PostAsJsonAsync($"{Configuration["WebApiUri"]}Token/GetToken", authData);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            this.authResponse = response.StatusCode.ToString();
+            this.token = null;
+            StateHasChanged();
+            return;
+        }
+
+        try
+        {
+            var responseContent = await response.Content.ReadFromJsonAsync<JwtAuthResponse>();
+            this.authResponse = response.StatusCode.ToString();
+            this.token = responseContent.Token;
+            this.tokenReceivedAt = DateTime.Now;
+        }
+        catch (NotSupportedException ex)
+        {
+            this.authResponse = $"The content type is not supported: {ex.StackTrace}";
+        }
+        catch (JsonException ex)
+        {
+            this.authResponse = $"Invalid JSON: {ex.StackTrace}";
+        }
+        StateHasChanged();
+    }
+
+    private void RemoveToken()
+    {
+        this.token = null;
+    }
+}

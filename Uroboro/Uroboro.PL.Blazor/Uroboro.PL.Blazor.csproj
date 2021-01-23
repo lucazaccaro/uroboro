@@ -22,4 +22,8 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Uroboro.Common.Models\Uroboro.Common.Models.csproj" />
+  </ItemGroup>
+
 </Project>
