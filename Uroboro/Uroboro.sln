@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.Common.Models", "Ur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.BL", "Uroboro.BL\Uroboro.BL.csproj", "{2F0D4BEA-41A9-4D4E-9697-98D1F7A5C694}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.DAL.InMemory", "Uroboro.DAL.InMemory\Uroboro.DAL.InMemory.csproj", "{A80E3E72-7F52-47E7-8390-7409869D3450}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2F0D4BEA-41A9-4D4E-9697-98D1F7A5C694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0D4BEA-41A9-4D4E-9697-98D1F7A5C694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F0D4BEA-41A9-4D4E-9697-98D1F7A5C694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A80E3E72-7F52-47E7-8390-7409869D3450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A80E3E72-7F52-47E7-8390-7409869D3450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A80E3E72-7F52-47E7-8390-7409869D3450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A80E3E72-7F52-47E7-8390-7409869D3450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
