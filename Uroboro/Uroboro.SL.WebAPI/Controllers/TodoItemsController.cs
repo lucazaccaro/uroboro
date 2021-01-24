@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Uroboro.BL.Managers;
 using Uroboro.Common.Models;
-using Uroboro.SL.WebAPI.Models;
 
 namespace Uroboro.SL.WebAPI.Controllers
 {
@@ -12,17 +10,27 @@ namespace Uroboro.SL.WebAPI.Controllers
     [ApiController]
     public class TodoItemsController : Controller
     {
-        private readonly TodoContext _context;
+        // Context management moved to its own Assembly
+        // private readonly TodoContext _context;
+        private TodoItemsManager _manager = null;
 
-        public TodoItemsController(TodoContext context)
+        // Context management moved to its own Assembly
+        //public TodoItemsController(TodoContext context)
+        //{
+        //    _context = context;
+        //    _manager = new TodoItemsManager();
+        //}
+
+        public TodoItemsController()
         {
-            _context = context;
+            _manager = new TodoItemsManager();
         }
 
         [HttpGet]
         public async Task<IActionResult> Read()
         {
-            var todoItems = await _context.TodoItems.ToListAsync();
+            // var todoItems = await _context.TodoItems.ToListAsync();
+            var todoItems = await _manager.Read();
             return Ok(todoItems);
         }
 
@@ -33,9 +41,8 @@ namespace Uroboro.SL.WebAPI.Controllers
             {
                 return NotFound();
             }
-
-            var todoItem = await _context.TodoItems
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var todoItem = await _context.TodoItems.FirstOrDefaultAsync(m => m.Id == id);
+            var todoItem = await _manager.Details(id);
             if (todoItem == null)
             {
                 return NotFound();
@@ -51,9 +58,10 @@ namespace Uroboro.SL.WebAPI.Controllers
             {
                 return BadRequest();
             }
-            _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);               
+            //_context.TodoItems.Add(todoItem);
+            //await _context.SaveChangesAsync();
+            var result = await _manager.Create(todoItem);
+            return CreatedAtAction(nameof(Create), new { id = result.Id }, result);               
         }
 
         [HttpPut("Update")]
@@ -68,19 +76,17 @@ namespace Uroboro.SL.WebAPI.Controllers
             {
                 try
                 {
-                    _context.Update(todoItem);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TodoItemExists(todoItem.Id))
+                    //_context.Update(todoItem);
+                    //await _context.SaveChangesAsync();
+                    var result = await _manager.Update(todoItem);
+                    if (result == null)
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    return BadRequest(ex);
                 }
             }
             return Ok(todoItem);
@@ -89,20 +95,19 @@ namespace Uroboro.SL.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
-
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            _context.TodoItems.Remove(todoItem);
-            await _context.SaveChangesAsync();
-            return Ok(id);
-        }
-
-        private bool TodoItemExists(long id)
-        {
-            return _context.TodoItems.Any(e => e.Id == id);
+            //var todoItem = await _context.TodoItems.FindAsync(id);
+            //_context.TodoItems.Remove(todoItem);
+            //await _context.SaveChangesAsync();
+            var result = await _manager.Delete(id.Value);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }
