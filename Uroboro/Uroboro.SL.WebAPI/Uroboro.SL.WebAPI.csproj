@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Uroboro.BL\Uroboro.BL.csproj" />
     <ProjectReference Include="..\Uroboro.Common.Models\Uroboro.Common.Models.csproj" />
   </ItemGroup>
 

@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Uroboro.Common.Models\Uroboro.Common.Models.csproj" />
+  </ItemGroup>
+
 </Project>
