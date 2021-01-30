@@ -16,6 +16,8 @@ namespace Uroboro.SL.SignalR
 {
     public class Startup
     {
+        private readonly string CorsOptions = "_CorsOptions";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,7 +28,16 @@ namespace Uroboro.SL.SignalR
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: CorsOptions,
+                    builder =>
+                    {
+                        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().Build();
+                    });
+            });
 
+            services.AddSignalR();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -46,12 +57,14 @@ namespace Uroboro.SL.SignalR
 
             app.UseHttpsRedirection();
 
+            app.UseCors(CorsOptions);
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<Hubs.SampleHub>("/SampleHub");
                 endpoints.MapControllers();
             });
         }
