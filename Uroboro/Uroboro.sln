@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.SL.WebAPI", "Urobor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.Common.Models", "Uroboro.Common.Models\Uroboro.Common.Models.csproj", "{BBB00760-D5F2-4EAE-831F-B99E8DB1068B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.BL", "Uroboro.BL\Uroboro.BL.csproj", "{2F0D4BEA-41A9-4D4E-9697-98D1F7A5C694}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.BL", "Uroboro.BL\Uroboro.BL.csproj", "{2F0D4BEA-41A9-4D4E-9697-98D1F7A5C694}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.DAL.InMemory", "Uroboro.DAL.InMemory\Uroboro.DAL.InMemory.csproj", "{A80E3E72-7F52-47E7-8390-7409869D3450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uroboro.DAL.InMemory", "Uroboro.DAL.InMemory\Uroboro.DAL.InMemory.csproj", "{A80E3E72-7F52-47E7-8390-7409869D3450}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uroboro.SL.SignalR", "Uroboro.SL.SignalR\Uroboro.SL.SignalR.csproj", "{56C9F84F-CBAA-485F-A6C8-C5ED22BEBF22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{A80E3E72-7F52-47E7-8390-7409869D3450}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A80E3E72-7F52-47E7-8390-7409869D3450}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A80E3E72-7F52-47E7-8390-7409869D3450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C9F84F-CBAA-485F-A6C8-C5ED22BEBF22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C9F84F-CBAA-485F-A6C8-C5ED22BEBF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C9F84F-CBAA-485F-A6C8-C5ED22BEBF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C9F84F-CBAA-485F-A6C8-C5ED22BEBF22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
