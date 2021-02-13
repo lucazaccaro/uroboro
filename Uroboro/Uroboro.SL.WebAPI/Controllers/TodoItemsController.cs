@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Uroboro.BL.Managers;
+using Uroboro.BL.Managers.Todo;
 using Uroboro.Common.Models;
 
 namespace Uroboro.SL.WebAPI.Controllers
@@ -12,7 +13,7 @@ namespace Uroboro.SL.WebAPI.Controllers
     {
         // Context management moved to its own Assembly
         // private readonly TodoContext _context;
-        private TodoItemsManager _manager = null;
+        private readonly ITodoItemsManager _manager;
 
         // Context management moved to its own Assembly
         //public TodoItemsController(TodoContext context)
@@ -21,9 +22,9 @@ namespace Uroboro.SL.WebAPI.Controllers
         //    _manager = new TodoItemsManager();
         //}
 
-        public TodoItemsController()
+        public TodoItemsController(ITodoItemsManager manager)
         {
-            _manager = new TodoItemsManager();
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
 
         [HttpGet]
@@ -61,7 +62,7 @@ namespace Uroboro.SL.WebAPI.Controllers
             //_context.TodoItems.Add(todoItem);
             //await _context.SaveChangesAsync();
             var result = await _manager.Create(todoItem);
-            return CreatedAtAction(nameof(Create), new { id = result.Id }, result);               
+            return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
         }
 
         [HttpPut("Update")]
