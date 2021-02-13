@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Uroboro.Common.Models;
 using Uroboro.PL.Blazor.Models;
 
 namespace Uroboro.PL.Blazor.Services
@@ -23,7 +24,7 @@ namespace Uroboro.PL.Blazor.Services
 
         public Task<IReadOnlyList<TodoItem>> GetAsync()
         {
-            TodoItem item = new TodoItem() { IsDone = true, Title = "Fake Item" };
+            TodoItem item = new TodoItem() { IsComplete = true, Name = "Fake Item" };
             List<TodoItem> list = new List<TodoItem>() { item };
             IReadOnlyList<TodoItem> result = list.AsReadOnly();
             Console.WriteLine("GetAsync called");

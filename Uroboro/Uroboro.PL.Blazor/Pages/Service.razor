@@ -1,5 +1,5 @@
-﻿@using Models;
-@using Services
+﻿@using Services
+@using Uroboro.Common.Models
 @inject IBlazorService BlazorService;
 @page "/service"
 
@@ -10,7 +10,7 @@
     <ul>
         @foreach (var item in items)
         {
-            <li>@item.Title (@item.IsDone)</li>
+            <li>@item.Name (@item.IsComplete)</li>
         }
     </ul>
 }
