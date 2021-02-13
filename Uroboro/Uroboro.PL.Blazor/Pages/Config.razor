@@ -1,6 +1,9 @@
 ﻿@page "/config"
 @using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@using Uroboro.PL.Blazor.Models 
 @inject IConfiguration Configuration
+@inject IOptions<UroboroSettings> UroboroSettings
 
 <h1 style="font-size:@Configuration["h1FontSize"]">
     Configuration example
@@ -36,5 +39,10 @@
     protected override void OnInitialized()
     {
         var wheelsSection = Configuration.GetSection("wheels");
+
+        var UroboroInfoSection = Configuration.GetSection("Uroboro");
+        var UroboroInfoSubValue = Configuration["Uroboro:RepoLink"];
+
+        var aaa = UroboroSettings.Value;
     }
 }

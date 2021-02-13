@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Uroboro.PL.Blazor.Models;
 using Uroboro.PL.Blazor.Services;
 
 namespace Uroboro.PL.Blazor
@@ -18,6 +19,10 @@ namespace Uroboro.PL.Blazor
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+
+            builder.Services.AddOptions();
+            builder.Services.Configure<UroboroSettings>(builder.Configuration.GetSection("Uroboro"));
+            builder.Services.AddSingleton<IConfiguration>(builder.Configuration);            
 
             builder.Services.AddSingleton<IBlazorService, BlazorService>();
 

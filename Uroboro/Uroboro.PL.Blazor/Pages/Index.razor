@@ -1,56 +1,29 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
-@inject IWebAssemblyHostEnvironment HostEnvironment
+@using Microsoft.Extensions.Options
+@using Uroboro.PL.Blazor.Models
+@inject IOptions<UroboroSettings> UroboroSettingsOptions
 
-<h1>Hello!</h1>
-<p>Welcome to <strong>Uroboro</strong>.</p>
-<p>Environment: @HostEnvironment.Environment</p>
+<h1>Welcome to <strong>Uroboro</strong>!</h1>
+<p>An always-updated full stack solution built in .NET</p>
 
-<img src="/images/uroboro.png" alt="uroboro" />
-
-<Dialog Title="Learn More">
+<Dialog Title="Learn more" Url="@UroboroSettings?.WikipediaLink">
     Do you want to
-    <i>learn more</i> about Blazor?
+    <i>learn more</i> about Uroboro?
+    <img src="/images/uroboro.png" alt="uroboro" style="display: block;" />
+    Uroboro is an ancient symbol depicting a serpent or dragon eating its own tail.
+    It is often interpreted as a symbol for eternal cyclic renewal
+    and it means that everything here will always be updated to the latest available version!
 </Dialog>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-<Counter IncrementAmount="10" OnClickCallback="@ShowMessage" />
-
-<h2>@message</h2>
-
-@for (var i = 1; i < 4; i++)
-{
-    var buttonNumber = i;
-
-    <button class="btn btn-primary"
-            @onclick="@(e => UpdateHeading(e, buttonNumber))">
-        Button #@i
-    </button>
-}
-
-<input @ref="exampleInput" />
-
-<button @onclick="ChangeFocus">Focus the Input Element</button>
+<SurveyPrompt Title="@UroboroSurveyTitle" />
 
 @code {
-    private void ShowMessage()
+    private UroboroSettings UroboroSettings;
+
+    private string UroboroSurveyTitle = "How is Uroboro working for you?";
+
+    protected override void OnInitialized()
     {
-        Console.WriteLine("click on child");
-    }
-
-    private string message = "Select a button to learn its position.";
-
-    private void UpdateHeading(MouseEventArgs e, int buttonNumber)
-    {
-        message = $"You selected Button #{buttonNumber} at " +
-            $"mouse position: {e.ClientX} X {e.ClientY}.";
-    }
-
-    private ElementReference exampleInput;
-
-    private async Task ChangeFocus()
-    {
-        await exampleInput.FocusAsync();
+        UroboroSettings = UroboroSettingsOptions.Value;
     }
 }

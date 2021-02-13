@@ -1,8 +1,10 @@
-﻿<div class="card" style="width:22rem">
+﻿@inject NavigationManager NavManager
+
+<div class="card" style="width:30rem">
     <div class="card-body">
         <h3 class="card-title">@Title</h3>
         <p class="card-text">@ChildContent</p>
-        <button @onclick="OnYes">Yes!</button>
+        <button class="btn btn-primary" @onclick="OnYes">Yes please!</button>
     </div>
 </div>
 
@@ -13,8 +15,11 @@
     [Parameter]
     public string Title { get; set; }
 
+    [Parameter]
+    public string Url { get; set; }
+
     private void OnYes()
     {
-        Console.WriteLine("Write to the console in C#! 'Yes' button selected.");
+        NavManager.NavigateTo($"{Url}", forceLoad: true);
     }
 }
