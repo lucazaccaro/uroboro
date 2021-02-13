@@ -9,6 +9,12 @@ namespace Uroboro.PL.Blazor.Services
 {
     public class BlazorService : IBlazorService
     {
+        public static Dictionary<string, string> InMemoryDictionarySettings = new Dictionary<string, string>()
+        {
+            { "InMemoryKey", "Custom value from in-memory Dictionary" },
+            { "InMemorySection:SubKey", "Custom sub-value from in-memory Dictionary" }
+        };
+
         public int Init()
         {
             Console.WriteLine("Init called");

@@ -1,0 +1,91 @@
+﻿@page "/about"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@using Uroboro.PL.Blazor.Models
+@inject IConfiguration Configuration
+@inject IOptions<UroboroSettings> UroboroSettingsOptions
+@inject IWebAssemblyHostEnvironment HostEnvironment
+
+<h3>About</h3>
+
+<h5>Environment</h5>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Environment:</td>
+            <td>@HostEnvironment.Environment</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>App Settings</h5>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>App Name:</td>
+            <td>@Configuration["AppName"]</td>
+        </tr>
+        <tr>
+            <td>Repo Url:</td>
+            <td><a href="@UroboroSettings?.RepoUrl" name="uroboro" target="_blank" >@UroboroSettings?.RepoUrl</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>Custom Settings</h5>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Custom Key:</td>
+            <td><i>@Configuration["CustomKey"]</i></td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>In-Memory Settings</h5>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>InMemory Key:</td>
+            <td><i>@Configuration["InMemoryKey"]</i></td>
+        </tr>
+        <tr>
+            <td>InMemory SubKey:</td>
+            <td><i>@Configuration["InMemorySection:SubKey"]</i></td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    private UroboroSettings UroboroSettings;
+
+    protected override void OnInitialized()
+    {
+        UroboroSettings = UroboroSettingsOptions.Value;
+    }
+}

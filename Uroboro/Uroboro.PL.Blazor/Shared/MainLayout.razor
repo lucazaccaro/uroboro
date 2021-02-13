@@ -4,13 +4,13 @@
     <div class="sidebar">
         <NavMenu />
     </div>
-
     <div class="main">
         <div class="top-row px-4">
-            <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-            @*<a href="https://github.com/dotnet/AspNetCore.Docs/tree/master/aspnetcore/blazor" target="_blank">GitHub</a>*@
+            @*<a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>*@
+            <NavLink class="ml-md-auto" href="about">
+                About
+            </NavLink>
         </div>
-
         <div class="content px-4">
             @Body
         </div>

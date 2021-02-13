@@ -9,6 +9,7 @@ namespace Uroboro.PL.Blazor.Services
 {
     interface IBlazorService
     {
+        static Dictionary<string, string> InMemoryDictionarySettings;
         int Init();
         Task<int> InitAsync();
         Task<IReadOnlyList<TodoItem>> GetAsync();

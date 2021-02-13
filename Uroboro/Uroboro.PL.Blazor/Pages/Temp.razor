@@ -1,9 +1,8 @@
 ﻿@page "/temp"
-@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
-@inject IWebAssemblyHostEnvironment HostEnvironment
 
 <h3>Temp</h3>
-<p>Environment: @HostEnvironment.Environment</p>
+
+<PasswordField @bind-Password="password" />
 
 <Counter IncrementAmount="10" OnClickCallback="@ShowMessage" />
 
@@ -24,6 +23,8 @@
 <button @onclick="ChangeFocus">Focus the Input Element</button>
 
 @code {
+    private string password;
+
     private void ShowMessage()
     {
         Console.WriteLine("click on child");

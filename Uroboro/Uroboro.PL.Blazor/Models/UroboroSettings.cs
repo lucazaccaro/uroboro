@@ -2,7 +2,7 @@
 {
     public class UroboroSettings
     {
-        public string RepoLink { get; set; }
-        public string WikipediaLink { get; set; }
+        public string RepoUrl { get; set; }
+        public string WikipediaUrl { get; set; }
     }
 }
