@@ -9,6 +9,22 @@
 
 <h3>About</h3>
 
+<h5>Assembly</h5>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Version:</td>
+            <td>@GetAssemblyVersion()</td>
+        </tr>
+    </tbody>
+</table>
+
 <h5>Environment</h5>
 <table class="table table-striped table-hover">
     <thead>
@@ -40,7 +56,7 @@
         </tr>
         <tr>
             <td>Repo Url:</td>
-            <td><a href="@UroboroSettings?.RepoUrl" name="uroboro" target="_blank" >@UroboroSettings?.RepoUrl</a></td>
+            <td><a href="@UroboroSettings?.RepoUrl" name="uroboro" target="_blank">@UroboroSettings?.RepoUrl</a></td>
         </tr>
     </tbody>
 </table>
@@ -87,5 +103,10 @@
     protected override void OnInitialized()
     {
         UroboroSettings = UroboroSettingsOptions.Value;
+    }
+
+    private string GetAssemblyVersion()
+    {
+        return GetType().Assembly.GetName().Version.ToString();
     }
 }
