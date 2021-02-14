@@ -22,7 +22,7 @@ namespace Uroboro.SL.WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("GetToken")]
-        public IActionResult GetToken([FromBody] AuthData authData)
+        public IActionResult GetToken([FromBody] JwtAuthRequest authData)
         {
             IActionResult response = Unauthorized();
 

@@ -10,60 +10,99 @@
 
 <h3>Auth</h3>
 
-<EditForm Model="@authData" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <p>
-        <label>
-            Username:
-            <InputText @bind-Value="authData.Username" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Password:
-            <InputText type="password" @bind-Value="authData.Password" />
-        </label>
-    </p>
-    <button type="submit">Submit</button>
-</EditForm>
+@if (!isAuthenticated)
+{
+    <div class="text-center form-signin">
+        <EditForm Model="@authRequest" OnValidSubmit="@HandleValidSubmit" class="form-signin">
+            <img class="mb-4" src="/images/uroboro.png" alt="uroboro" />
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <label for="txt-username" class="sr-only">Username</label>
+            <InputText @bind-Value="authRequest.Username" class="form-control" style="margin-bottom: 5px;" placeholder="Username" type="text" />
+            <label for="txt-password" class="sr-only">Password</label>
+            <InputText @bind-Value="authRequest.Password" class="form-control" style="margin-bottom: 5px;" placeholder="Password" type="password" />
+            <button class="btn btn-lg btn-primary btn-block" style="margin-bottom: 5px;" type="submit">Sign in</button>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </EditForm>
+    </div>
+}
 
-<span>@authResponse</span>
+@if (isRequestSent)
+{
+    if (!isAuthenticated)
+    {
+        <div class="text-center">
+            <div class="alert alert-danger mb-3 form-signin" role="alert">
+                Login failed! (@authResponse)
+            </div>
+            <div class="mb-3 form-signin">Try again with <i>admin</i> and <i>password</i></div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <div class="alert alert-success mb-3 form-signin" role="alert">
+                Login succeeded!
+            </div>
+        </div>
 
-<table style="max-width: 66%;">
-    <tr>
-        <td>Token:</td>
-        <td style="overflow-wrap: break-word;">@token</td>
-    </tr>
-    <tr>
-        <td>Received at:</td>
-        <td>@tokenReceivedAt</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><button @onclick="@RemoveToken">Remove Token</button></td>
-    </tr>
-</table>
-
-<h3>Secure APIs</h3>
-
-<button @onclick="SecureGet">GET</button>
-<button @onclick="SecurePost">POST</button>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Key</th>
+                    <th style="width: 50%;">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Token:</td>
+                    <td title="@token">@($"{@token.Substring(0, 25)}...")</td>
+                </tr>
+                <tr>
+                    <td>Last login:</td>
+                    <td>@tokenReceivedAt.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                </tr>
+                <tr>
+                    <td>Actions:</td>
+                    <td>
+                        <button class="btn btn-dark" @onclick="SecureGet">Secure GET</button>
+                        <button class="btn btn-dark" @onclick="SecurePost">Secure POST</button>
+                        <button class="btn btn-danger" @onclick="@RemoveToken">Logout</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Secure GET Response:</td>
+                    <td><pre>@secureGetResponse</pre></td>
+                </tr>
+                <tr>
+                    <td>Secure GET Response:</td>
+                    <td><pre>@securePostResponse</pre></td>
+                </tr>
+            </tbody>
+        </table>
+    }
+}
 
 @code {
-    private AuthData authData = new AuthData();
+    private JwtAuthRequest authRequest = new JwtAuthRequest();
+    private string authResponse = null;
+    private bool isAuthenticated = false;
+    private bool isRequestSent = false;
+    private string secureGetResponse = null;
+    private string securePostResponse = null;
     private string token = null;
     private DateTime tokenReceivedAt = DateTime.Now;
-    private string authResponse = null;
 
     private async void HandleValidSubmit()
     {
-        using var response = await Http.PostAsJsonAsync($"{Configuration["WebApiUri"]}Token/GetToken", authData);
+        using var response = await Http.PostAsJsonAsync($"{Configuration["WebApiUri"]}Token/GetToken", authRequest);
 
         if (!response.IsSuccessStatusCode)
         {
-            this.authResponse = response.StatusCode.ToString();
-            this.token = null;
+            isRequestSent = true;
+            isAuthenticated = false;
+            authResponse = response.StatusCode.ToString();
+            token = null;
             StateHasChanged();
             return;
         }
@@ -71,24 +110,30 @@
         try
         {
             var responseContent = await response.Content.ReadFromJsonAsync<JwtAuthResponse>();
-            this.authResponse = response.StatusCode.ToString();
-            this.token = responseContent.Token;
-            this.tokenReceivedAt = DateTime.Now;
+            isRequestSent = true;
+            isAuthenticated = true;
+            authResponse = response.StatusCode.ToString();
+            token = responseContent.Token;
+            tokenReceivedAt = DateTime.Now;
+            authRequest.Username = string.Empty;
+            authRequest.Password = string.Empty;
         }
         catch (NotSupportedException ex)
         {
-            this.authResponse = $"The content type is not supported: {ex.StackTrace}";
+            authResponse = $"The content type is not supported: {ex.StackTrace}";
         }
         catch (JsonException ex)
         {
-            this.authResponse = $"Invalid JSON: {ex.StackTrace}";
+            authResponse = $"Invalid JSON: {ex.StackTrace}";
         }
         StateHasChanged();
     }
 
     private void RemoveToken()
     {
-        this.token = null;
+        token = null;
+        isRequestSent = false;
+        isAuthenticated = false;
     }
 
     private async void SecureGet()
@@ -100,23 +145,24 @@
         };
 
         requestMessage.Headers.Authorization =
-            new AuthenticationHeaderValue("Bearer", this.token);
+            new AuthenticationHeaderValue("Bearer", token);
 
         requestMessage.Headers.TryAddWithoutValidation(
-            "x-custom-header", "value");
+            "x-custom-header", "x-custom-value");
 
         try
         {
+            secureGetResponse = null;
+            securePostResponse = null;
             var response = await Http.SendAsync(requestMessage);
             var responseStatusCode = response.StatusCode;
-
             var responseBody = await response.Content.ReadAsStringAsync();
-            this.authResponse = responseStatusCode == System.Net.HttpStatusCode.OK ? responseBody : responseStatusCode.ToString();
+            secureGetResponse = responseStatusCode == System.Net.HttpStatusCode.OK ? responseBody : responseStatusCode.ToString();
             StateHasChanged();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            this.authResponse = $"An error occurred: {ex.StackTrace}";
+            authResponse = $"An error occurred: {ex.StackTrace}";
         }
     }
 
@@ -132,20 +178,21 @@
             new AuthenticationHeaderValue("Bearer", this.token);
 
         requestMessage.Headers.TryAddWithoutValidation(
-            "x-custom-header", "value");
+            "x-custom-header", "x-custom-value");
 
         try
         {
+            secureGetResponse = null;
+            securePostResponse = null;
             var response = await Http.SendAsync(requestMessage);
             var responseStatusCode = response.StatusCode;
-
             var responseBody = await response.Content.ReadAsStringAsync();
-            this.authResponse = responseStatusCode == System.Net.HttpStatusCode.OK ? responseBody : responseStatusCode.ToString();
+            securePostResponse = responseStatusCode == System.Net.HttpStatusCode.OK ? responseBody : responseStatusCode.ToString();
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            this.authResponse = $"An error occurred: {ex.StackTrace}";
+            authResponse = $"An error occurred: {ex.StackTrace}";
         }
     }
 }

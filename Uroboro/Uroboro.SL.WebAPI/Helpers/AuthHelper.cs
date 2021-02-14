@@ -11,7 +11,7 @@ namespace Uroboro.SL.WebAPI.Helpers
 {
     public static class AuthHelper
     {
-        public static User Authenticate(AuthData authData, IEnumerable<User> users)
+        public static User Authenticate(JwtAuthRequest authData, IEnumerable<User> users)
         {
             User user = users.FirstOrDefault(i => i.Username == authData.Username && i.Password == authData.Password);
             return user;

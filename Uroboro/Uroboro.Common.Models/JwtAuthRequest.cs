@@ -2,7 +2,7 @@
 
 namespace Uroboro.Common.Models
 {
-    public class AuthData
+    public class JwtAuthRequest
     {
         [Required]
         public string Username { get; set; }
