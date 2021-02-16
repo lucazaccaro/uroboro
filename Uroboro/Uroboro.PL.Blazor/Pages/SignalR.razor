@@ -5,10 +5,11 @@
 @inject IConfiguration Configuration
 
 <h3>SignalR</h3>
+<p>This component demonstrates sending and retrieving data from a full-duplex channel built with SignalR Core.</p>
 
-<button @onclick="BtnSendMessageWithoutParameters">Send without params</button>
-<button @onclick="BtnSendMessageWithParameters">Send with params</button>
-<button @onclick="BtnReceiveParameters">Receive params</button>
+<button class="btn btn-sm btn-primary" @onclick="SendMessageWithoutParametersWrapper">Send message without params</button>
+<button class="btn btn-sm btn-primary" @onclick="SendMessageWithParametersWrapper">Send message with params</button>
+<button class="btn btn-sm btn-primary" @onclick="ReceiveParametersWrapper">Receive message with params</button>
 
 @if (messages.Count > 0)
 {
@@ -24,19 +25,21 @@
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
 
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+
     protected override async Task OnInitializedAsync()
     {
-
+        // Connect to the Hub
         hubConnection = new HubConnectionBuilder()
             .WithUrl($"{Configuration["SignalRUri"]}SampleHub")
             .Build();
-
+        // Register callback to handle received messages with one parameter
         hubConnection.On("GetServerMessage", (string message) =>
         {
             messages.Add(message);
             StateHasChanged();
         });
-
+        // Register callback to handle received message with more parameters
         hubConnection.On("GetServerMessageWithParams", (bool p1, TodoItem item) =>
         {
             messages.Add($"Item = [{item.ToString()}], Received = [{p1}]");
@@ -46,7 +49,7 @@
         await hubConnection.StartAsync();
     }
 
-    private async void BtnSendMessageWithoutParameters()
+    private async void SendMessageWithoutParametersWrapper()
     {
         if (IsConnected)
         {
@@ -54,7 +57,7 @@
         }
     }
 
-    private async void BtnSendMessageWithParameters()
+    private async void SendMessageWithParametersWrapper()
     {
         if (IsConnected)
         {
@@ -62,21 +65,13 @@
         }
     }
 
-    private async void BtnReceiveParameters()
+    private async void ReceiveParametersWrapper()
     {
         if (IsConnected)
         {
             await SendMessageWithParamInResponse();
         }
     }
-
-    //private void CallLoadData()
-    //{
-    //    Task.Run(async () =>
-    //    {
-    //        await LoadData();
-    //    });
-    //}
 
     Task SendMessageWithParam() => hubConnection.SendAsync("GetClientMessageWithParam", "Blazor");
     Task SendMessageWithParamInResponse() => hubConnection.SendAsync("SendParamsToClient", "Blazor");
@@ -85,8 +80,6 @@
     {
         await hubConnection.SendAsync("GetClientMessage");
     }
-
-    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
 
     public void Dispose()
     {
