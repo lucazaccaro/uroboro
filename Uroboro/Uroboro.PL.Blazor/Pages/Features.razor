@@ -1,9 +1,14 @@
-﻿@page "/temp"
+﻿@page "/Features"
+@using Microsoft.Extensions.Logging;
+@inject ILoggerFactory LoggerFactory
 
 <h3>Temp</h3>
 
+<button class="btn btn-primary" @onclick="TestLog">Click me</button>
+
 <PasswordField @bind-Password="password" />
 
+<Counter IncrementAmount="1" OnClickCallback="@ShowMessage" />
 <Counter IncrementAmount="10" OnClickCallback="@ShowMessage" />
 
 <h2>@message</h2>
@@ -23,6 +28,14 @@
 <button @onclick="ChangeFocus">Focus the Input Element</button>
 
 @code {
+    private int currentCount = 0;
+
+    private void TestLog()
+    {
+        var logger = LoggerFactory.CreateLogger<Features>();
+        logger.LogWarning("Someone has clicked me!");
+    }
+
     private string password;
 
     private void ShowMessage()
