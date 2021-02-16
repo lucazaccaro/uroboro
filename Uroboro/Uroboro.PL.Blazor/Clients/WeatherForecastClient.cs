@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using static Uroboro.PL.Blazor.Pages.FetchData;
 using System.Net.Http.Json;
+using Uroboro.PL.Blazor.Models;
 
-namespace Uroboro.PL.Blazor
+namespace Uroboro.PL.Blazor.Clients
 {
     public class WeatherForecastHttpClient
     {
