@@ -48,6 +48,13 @@
     </Virtualize>
 </div>
 
+<h1>Parent Component</h1>
+<p>Parent Message: <b>@parentMessage</b></p>
+<p>
+    <button class="btn btn-sm btn-primary" @onclick="ChangeValue">Change from Parent</button>
+</p>
+
+<ChildSample @bind-ChildMessage="parentMessage" />
 
 @code {
     private int currentCount = 0;
@@ -89,5 +96,12 @@
             allFlights.Add(new Flight() { FlightId = i, Summary = "Summary" });
         }
         return base.OnInitializedAsync();
+    }
+
+    private string parentMessage = "Initial value set in Parent";
+
+    private void ChangeValue()
+    {
+        parentMessage = $"Set in Parent {DateTime.Now}";
     }
 }
