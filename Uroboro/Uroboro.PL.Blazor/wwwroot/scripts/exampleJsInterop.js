@@ -21,8 +21,7 @@
     },
     focusElement: function (element) {
         element.focus();
-    },
-    
+    }
 };
 
 function updateMessageCallerJS(name) {
