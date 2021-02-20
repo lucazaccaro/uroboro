@@ -1,17 +1,15 @@
 ﻿using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Uroboro.PL.Blazor
+namespace Uroboro.PL.Blazor.Helpers
 {
-    public class ExampleJsInterop : IDisposable
+    public class JsInteropHelper : IDisposable
     {
         private readonly IJSRuntime jsRuntime;
         private DotNetObjectReference<HelloHelper> objRef;
 
-        public ExampleJsInterop(IJSRuntime jsRuntime)
+        public JsInteropHelper(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
         }
