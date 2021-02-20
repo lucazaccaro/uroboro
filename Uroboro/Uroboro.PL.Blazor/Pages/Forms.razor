@@ -1,0 +1,140 @@
+﻿@page "/Forms"
+@using Uroboro.PL.Blazor.Models;
+
+<h4>Forms</h4>
+<p>This component demonstrates retrieving data from a Bootstrap form and bind it to a ViewModel.</p>
+
+<EditForm Model="@account" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="frm-account-username">Username</label>
+            <InputText class="form-control" id="frm-account-username" placeholder="Username" @bind-Value="account.Username" />
+        </div>
+        <div class="form-group col-md-6">
+            <label for="frm-account-password">Password</label>
+            <InputText type="password" class="form-control" id="frm-account-password" placeholder="Password" @bind-Value="account.Password" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="frm-account-name">Name</label>
+            <InputText class="form-control" id="frm-account-name" placeholder="Name" @bind-Value="account.Name" />
+        </div>
+        <div class="form-group col-md-6">
+            <label for="frm-account-surname">Surname</label>
+            <InputText class="form-control" id="frm-account-surname" placeholder="Surname" @bind-Value="account.Surname" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="frm-account-birthdate">Birth Date</label>
+            <InputDate class="form-control" id="frm-account-birthdate" placeholder="Birth Date" @bind-Value="account.BirthDate" @bind-Value:format="dd/MM/yyyy" format-value="dd/MM/yyyy" />
+        </div>
+        <div class="form-group col-md-6">
+            <label for="frm-account-birthplace">Birth Place</label>
+            <InputSelect class="form-control" id="frm-account-birthplace" @bind-Value="account.BirthPlace">
+                <option value="">Select classification ...</option>
+                <option value="Europe">Europe</option>
+                <option value="USA">USA</option>
+                <option value="Other">Other</option>
+            </InputSelect>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="frm-account-category">Category</label>
+            <InputSelect class="form-control" id="frm-account-category" @bind-Value="account.Category">
+                <option value="">Select classification ...</option>
+                <option value="Department_1">Department 1</option>
+                <option value="Department_2">Department 2</option>
+                <option value="Department_3">Department 3</option>
+            </InputSelect>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="frm-account-code">Code</label>
+            <InputNumber class="form-control" id="frm-account-code" @bind-Value="account.Code" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="frm-account-message">Message</label>
+        <InputTextArea class="form-control" id="frm-account-message" placeholder="Message" @bind-Value="account.Message" />
+    </div>
+    <div class="form-group">
+        <label for="frm-account-image">Image</label>
+        <br />
+        <InputFile class="btn btn-primary" OnChange="@OnInputFileChange" multiple />
+        @if (imageDataUrls.Count > 0)
+        {
+            <h4>Images</h4>
+            <div class="card" style="width:30rem;">
+                <div class="card-body">
+                    @foreach (var imageDataUrl in imageDataUrls)
+                    {
+                        <img class="rounded m-1" src="@imageDataUrl" />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <InputRadioGroup Name="frm-account-gender" @bind-Value="account.Gender">
+                @foreach (var gender in (Gender[])Enum.GetValues(typeof(Gender)))
+                {
+                    <div class="form-check form-check-inline">
+                        <InputRadio class="form-check-input" type="radio" name="frm-account-gender" Value="@gender" />
+                        <label class="form-check-label" for="frm-account-gender">@gender</label>
+                    </div>
+                }
+            </InputRadioGroup>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="form-check form-check-inline">
+                <InputCheckbox class="form-check-input" type="checkbox" id="frm-account-register" @bind-Value="account.IsRegistered" />
+                <label class="form-check-label" for="frm-account-hobbies-tech">Register</label>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@if (formattedAccount != null)
+{
+    <hr />
+    <pre>@formattedAccount</pre>
+}
+
+@code {
+    private Account account = new Account() { BirthDate = DateTime.Now };
+    private EditContext editContext;
+    private string formattedAccount = null;
+    private IList<string> imageDataUrls = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(account);
+    }
+
+    private void HandleValidSubmit()
+    {
+        formattedAccount = account.ToString();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var maxAllowedFiles = 3;
+        var format = "image/png";
+
+        foreach (var imageFile in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            var resizedImageFile = await imageFile.RequestImageFileAsync(format, 100, 100);
+            var buffer = new byte[resizedImageFile.Size];
+            await resizedImageFile.OpenReadStream().ReadAsync(buffer);
+            var imageDataUrl = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            imageDataUrls.Add(imageDataUrl);
+        }
+    }
+}
