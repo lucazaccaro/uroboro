@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Uroboro.Common.Models\Uroboro.Common.Models.csproj" />
+    <ProjectReference Include="..\Uroboro.Common\Uroboro.Common.csproj" />
   </ItemGroup>
 
 </Project>

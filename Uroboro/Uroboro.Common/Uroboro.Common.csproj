@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Uroboro.Common\Uroboro.Common.csproj" />
-    <ProjectReference Include="..\Uroboro.DAL.InMemory\Uroboro.DAL.InMemory.csproj" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
