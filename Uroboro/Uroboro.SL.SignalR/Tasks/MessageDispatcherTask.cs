@@ -29,13 +29,6 @@ namespace Uroboro.SL.SignalR.Tasks
             string message = rnd.Next(10000).ToString();
 
             await this._hubContext.Clients.All.SendAsync("GetServerMessage", message);
-
-            //foreach (KeyValuePair<string, string> connectionItem in connections)
-            //{
-            //    await this._hubContext.Clients.Client(connectionItem.Key).SendAsync("receiveEarnings", this._dataService.GetEarnings(connectionItem.Value));
-            //}
-
-            // await StopAsync(_tk);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
