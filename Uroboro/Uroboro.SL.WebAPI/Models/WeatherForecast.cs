@@ -1,6 +1,6 @@
 using System;
 
-namespace Uroboro.SL.WebAPI
+namespace Uroboro.SL.WebAPI.Models
 {
     public class WeatherForecast
     {

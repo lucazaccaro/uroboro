@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Uroboro.SL.WebAPI.Models;
 
 namespace Uroboro.SL.WebAPI.Controllers
 {
