@@ -10,12 +10,9 @@ namespace Uroboro.DAL.InMemory.Repos.Todo
     {
         private readonly TodoItemsContext _context;
 
-        public TodoItemsRepo()
+        public TodoItemsRepo(TodoItemsContext context)
         {
-            var builder = new DbContextOptionsBuilder<TodoItemsContext>();
-            builder.UseInMemoryDatabase("TodoItems");
-
-            _context = new TodoItemsContext(builder.Options); ;
+            _context = context;
         }
 
         public async Task<IEnumerable<TodoItem>> Read()

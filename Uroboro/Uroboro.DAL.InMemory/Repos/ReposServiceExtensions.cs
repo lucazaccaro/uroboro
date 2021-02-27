@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Uroboro.DAL.InMemory.Contexts;
 using Uroboro.DAL.InMemory.Repos.Todo;
 
 namespace Uroboro.DAL.InMemory.Repos
@@ -10,6 +12,8 @@ namespace Uroboro.DAL.InMemory.Repos
     {
         public static IServiceCollection AddTodoRepo(this IServiceCollection services)
         {
+            services.AddDbContext<TodoItemsContext>(
+                options => options.UseInMemoryDatabase("TodoItems"));
             services.AddTransient<ITodoItemsRepo, TodoItemsRepo>();
 
             return services;
