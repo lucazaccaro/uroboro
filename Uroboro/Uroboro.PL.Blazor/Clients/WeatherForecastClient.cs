@@ -21,6 +21,7 @@ namespace Uroboro.PL.Blazor.Clients
 
             try
             {
+                // This project does not directly expose REST APIs
                 // forecasts = await http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
                 forecasts = await http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
             }

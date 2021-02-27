@@ -2,16 +2,14 @@
 @using Microsoft.Extensions.Configuration
 @using System.Net.Http
 @using Uroboro.Common.Models
-@using Uroboro.PL.Blazor.Models;
-@using Uroboro.PL.Blazor.Clients;
-@using Uroboro.PL.Blazor.Services;
 @inject HttpClient Http
+@inject IBlazorService BlazorService;
 @inject IConfiguration Configuration
 @inject IHttpClientFactory ClientFactory
 @inject WeatherForecastHttpClient TypedHttp
-@inject IBlazorService BlazorService;
 
 <h3>WebAPI</h3>
+<p>This component demonstrates sending and retrieving data from a REST API client built with WebAPI Core.</p>
 
 <TabSet>
     <Tab Title="WebAPI">
