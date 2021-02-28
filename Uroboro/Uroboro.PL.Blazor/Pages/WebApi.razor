@@ -176,6 +176,7 @@
         }
         catch(Exception ex)
         {
+            Console.WriteLine(ex.StackTrace);
             webApiTodoItems = (new List<TodoItem>()).ToArray();
         }
         StateHasChanged();
