@@ -19,15 +19,14 @@ Let's try to build a TODO list for the first version of uroboro
 
 ## todo
 This is a list of things to be included in the first relese:
-
-- [ ] A SQL Server Database project to handle DB stuff (maybe with LocalDB)
-- [ ] An Entity Framework Core project to handle Data access
-- [ ] A .NET 5+ project to centralize Business Logic
-- [ ] A .NET 5+ project to write REST APIs with WebAPI
-- [ ] A .NET 5+ project to define ASP.NET Core SignalR hubs
-- [ ] A .NET 5+ Blazor WebAssembly project to build the main Frontend
+- [x] An Entity Framework Core project to handle Data access (maybe with In-Memory)
+- [x] A .NET 5+ project to centralize Business Logic
+- [x] A .NET 5+ project to write REST APIs with WebAPI
+- [x] A .NET 5+ project to define ASP.NET Core SignalR hubs
+- [x] A .NET 5+ Blazor WebAssembly project to build the main Frontend
 
 Other things that may come at a later stage are:
+- [ ] A SQL Server Database project to handle DB stuff (maybe with LocalDB)
 - [ ] A .NET 5+ project to write gRPC Services
 - [ ] Other Frontend alternatives in Angular, React and Vue
 - [ ] Better microservices architecture patterns
