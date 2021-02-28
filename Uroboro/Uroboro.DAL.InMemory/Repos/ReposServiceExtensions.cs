@@ -13,6 +13,12 @@ namespace Uroboro.DAL.InMemory.Repos
                 options => options.UseInMemoryDatabase("TodoItems"));
             services.AddTransient<ITodoItemsRepo, TodoItemsRepo>();
 
+            //// DbContext init for SQL Server DB (sample)
+            //services.AddDbContext<SpecificContext>(options =>
+            //{
+            //    options.UseSqlServer(Configuration.GetConnectionString("DB"), providerOptions => providerOptions.EnableRetryOnFailure());
+            //});
+
             return services;
         }
     }
