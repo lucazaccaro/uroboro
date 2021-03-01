@@ -1,7 +1,7 @@
 # uroboro
 An always-updated full stack solution built in .NET
 
-## project info
+## Project info
 > What will uroboro be like when it's done?
 
 First of all, it will never "be done".
@@ -17,7 +17,7 @@ Semantic version will be used to handle updates.
 
 Let's try to build a TODO list for the first version of uroboro
 
-## todo
+## TODO
 This is a list of things to be included in the first relese:
 - [x] An Entity Framework Core project to handle Data access (maybe with In-Memory)
 - [x] A .NET 5+ project to centralize Business Logic
@@ -33,5 +33,6 @@ Other things that may come at a later stage are:
 - [ ] Some sort of Azure integration
 - [ ] Some sort of GitHub CI/CD integration
 
-## contributions
-- VisualStudio.gitignore comes from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
+## Contributions
+- VisualStudio.gitignore from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
+- DI helpers from afj88
