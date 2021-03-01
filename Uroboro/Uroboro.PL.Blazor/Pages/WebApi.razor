@@ -1,0 +1,236 @@
+﻿@page "/WebApi"
+@using Microsoft.Extensions.Configuration
+@using System.Net.Http
+@using Uroboro.Common.Models
+@inject HttpClient Http
+@inject IBlazorService BlazorService;
+@inject IConfiguration Configuration
+@inject IHttpClientFactory ClientFactory
+@inject WeatherForecastHttpClient TypedHttp
+
+<h3>WebAPI</h3>
+<p>This component demonstrates sending and retrieving data from a REST API client built with WebAPI Core.</p>
+
+<TabSet>
+    <Tab Title="WebAPI">
+        <h4>Microsoft .NET WebAPI management</h4>
+        <p>This component demonstrates fetching data from a remote REST Service using WebAPI.</p>
+        <button class="btn btn-sm btn-primary" @onclick="@(async () => await GetAllFromWebApi())">Get All</button>
+        <label>
+            <input type="checkbox" @bind="showThirdTab" />
+            Toggle third TAB
+        </label>
+        <hr />
+        <div class="form-inline">
+            <div class="form-group mb-2" style="margin: 5px;">
+                <label for="new-item-value" class="sr-only">New Todo</label>
+                <input type="text" class="form-control form-control-sm" id="new-item-value" placeholder="New Todo" @bind="webApiNewItemName">
+            </div>
+            <div class="form-group mb-2" style="margin: 5px;">
+                <button class="btn btn-sm btn-primary" @onclick="@CreateTodoWrapper">Add</button>
+            </div>
+            @if (webApiTodoItems != null && webApiTodoItems.Any())
+            {
+                <div class="form-group mb-2" style="margin: 5px;">
+                    <label for="details-id" class="sr-only">Get by Id</label>
+                    <input type="number" class="form-control form-control-sm" style="width: 50px;" id="details-id" placeholder="Id" min="1" @bind="webApiDetailsId" />
+                </div>
+                <div class="form-group mb-2" style="margin: 5px;">
+                    <button class="btn btn-sm btn-primary" @onclick="@(e => GetByIdWrapper(webApiDetailsId))">GetById</button>
+                </div>
+            }
+        </div>
+        @if (webApiTodoItems != null)
+        {
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Todo</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in webApiTodoItems)
+                    {
+                        <tr>
+                            <td><input class="form-control form-control-sm" style="width: 50px;" type="text" readonly @bind="item.Id" /></td>
+                            <td><input class="form-control form-control-sm" type="text" @bind="item.Name" /></td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input position-static" type="checkbox" @bind="item.IsComplete" />
+                                </div>
+                            </td>
+                            <td><button class="btn btn-sm btn-primary" @onclick="(e => UpdateTodoWrapper(item))">Update</button></td>
+                            <td><button class="btn btn-sm btn-danger" @onclick="(e => DeleteTodoWrapper(item))">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </Tab>
+    <Tab Title="JSON">
+        <h4>Local JSON management</h4>
+        <p>This component demonstrates fetching data from a local JSON file.</p>
+        <button class="btn btn-sm btn-primary" @onclick="@(async () => await GetForecastsFromLocalJson())">Get Forecasts</button>
+        @if (isLocalJsonRequested)
+        {
+            <hr />
+            @if (forecastsFromHttpClient == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Temp. (C)</th>
+                            <th>Temp. (F)</th>
+                            <th>Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var forecast in forecastsFromHttpClient)
+                        {
+                            <tr>
+                                <td>@forecast.Date.ToString("dd/MM/yyyy")</td>
+                                <td>@forecast.TemperatureC</td>
+                                <td>@forecast.TemperatureF</td>
+                                <td>@forecast.Summary</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </Tab>
+    @if (showThirdTab)
+    {
+        <Tab Title="Service">
+            <h4>Local Blazor Service</h4>
+            <p>This component demonstrates fetching data from a local Blazor Service.</p>
+            <button class="btn btn-sm btn-primary" @onclick="@(async () => await GetDataFromLocalBlazorService())">Get Data</button>
+            @if (localBlazorServiceItems != null)
+            {
+                <hr />
+                <ul>
+                    @foreach (var item in localBlazorServiceItems)
+                    {
+                        <li>@item.Name (@item.IsComplete)</li>
+                    }
+                </ul>
+            }
+        </Tab>
+    }
+</TabSet>
+
+@code {
+    private bool showThirdTab = false;
+
+    protected override void OnInitialized()
+    {
+        webApiDetailsId = 1;
+    }
+
+    #region REST WebAPI
+    private int webApiDetailsId;
+    private string webApiNewItemName;
+    private TodoItem[] webApiTodoItems;
+
+    private async Task CreateTodoWrapper()
+    {
+        await AddTodoFromWebApi();
+        webApiTodoItems = null;
+        await GetAllFromWebApi();
+        StateHasChanged();
+    }
+
+    private async Task UpdateTodoWrapper(TodoItem item)
+    {
+        await UpdateTodoFromWebApi(item);
+        webApiTodoItems = null;
+        await GetAllFromWebApi();
+        StateHasChanged();
+    }
+
+    private async Task DeleteTodoWrapper(TodoItem item)
+    {
+        await DeleteTodoFromWebApi(item);
+        webApiTodoItems = null;
+        await GetAllFromWebApi();
+        StateHasChanged();
+    }
+
+    private async Task GetByIdWrapper(int id)
+    {
+        try
+        {
+            webApiTodoItems = null;
+            var result = await GetTodoFromWebApi(id);
+            webApiTodoItems = (new List<TodoItem>() { result }).ToArray();
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.StackTrace);
+            webApiTodoItems = (new List<TodoItem>()).ToArray();
+        }
+        StateHasChanged();
+    }
+
+    private async Task GetAllFromWebApi() =>
+        webApiTodoItems = await Http.GetFromJsonAsync<TodoItem[]>($"{Configuration["WebApiUri"]}TodoItems");
+
+    private async Task<TodoItem> GetTodoFromWebApi(int id)
+    {
+        return await Http.GetFromJsonAsync<TodoItem>($"{Configuration["WebApiUri"]}TodoItems/{id}");
+    }
+
+    private async Task AddTodoFromWebApi()
+    {
+        var addItem = new TodoItem { Name = webApiNewItemName, IsComplete = false };
+        await Http.PostAsJsonAsync($"{Configuration["WebApiUri"]}TodoItems/Create", addItem);
+    }
+
+    private async Task UpdateTodoFromWebApi(TodoItem item) =>
+        await Http.PutAsJsonAsync($"{Configuration["WebApiUri"]}TodoItems/Update?Id={item.Id}", item);
+
+    private async Task DeleteTodoFromWebApi(TodoItem item) =>
+        await Http.DeleteAsync($"{Configuration["WebApiUri"]}TodoItems/{item.Id}");
+    #endregion
+
+    #region Local JSON
+    private WeatherForecast[] forecastsFromHttpClient;
+    private WeatherForecast[] forecastsFromTypedHttpClient;
+    private bool isLocalJsonRequested = false;
+
+    private async Task GetForecastsFromLocalJson()
+    {
+        try
+        {
+            isLocalJsonRequested = true;
+            var client = ClientFactory.CreateClient("ServerAPI");
+            forecastsFromHttpClient = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+            forecastsFromTypedHttpClient = await TypedHttp.GetForecastAsync();
+        }
+        catch (Exception ex)
+        {
+            isLocalJsonRequested = false;
+            Console.WriteLine(ex.StackTrace);
+        }
+    }
+    #endregion
+
+    #region Local Blazor Service
+    private IReadOnlyList<TodoItem> localBlazorServiceItems;
+
+    private async Task GetDataFromLocalBlazorService()
+    {
+        localBlazorServiceItems = await BlazorService.GetAsync();
+    }
+    #endregion
+}

@@ -1,0 +1,113 @@
+﻿@page "/About"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@inject IConfiguration Configuration
+@inject IOptions<UroboroSettings> UroboroSettingsOptions
+@inject IWebAssemblyHostEnvironment HostEnvironment
+
+<h3>About</h3>
+<p>This component demonstrates retrieving configuration values from different sources.</p>
+<p>If you are looking for info about the author.. here the <a href="https://www.lucazaccaro.it/about" target="_blank">About Page</a> on the personal WebSite</p>
+
+<h4>Assembly</h4>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Version:</td>
+            <td>@GetAssemblyVersion()</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Environment</h4>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Environment:</td>
+            <td>@HostEnvironment.Environment</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>App Settings</h4>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>App Name:</td>
+            <td>@Configuration["AppName"]</td>
+        </tr>
+        <tr>
+            <td>Repo Url:</td>
+            <td><a href="@UroboroSettings?.RepoUrl" name="uroboro" target="_blank">@UroboroSettings?.RepoUrl</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Custom Settings</h4>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Custom Key:</td>
+            <td><i>@Configuration["CustomKey"]</i></td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>In-Memory Settings</h4>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>InMemory Key:</td>
+            <td><i>@Configuration["InMemoryKey"]</i></td>
+        </tr>
+        <tr>
+            <td>InMemory SubKey:</td>
+            <td><i>@Configuration["InMemorySection:SubKey"]</i></td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    private UroboroSettings UroboroSettings;
+
+    protected override void OnInitialized()
+    {
+        UroboroSettings = UroboroSettingsOptions.Value;
+    }
+
+    private string GetAssemblyVersion()
+    {
+        return GetType().Assembly.GetName().Version.ToString();
+    }
+}

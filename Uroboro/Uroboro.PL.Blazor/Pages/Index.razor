@@ -1,0 +1,28 @@
+﻿@page "/"
+@using Microsoft.Extensions.Options
+@inject IOptions<UroboroSettings> UroboroSettingsOptions
+
+<h1>Welcome to <strong>Uroboro</strong>!</h1>
+<p>An always-updated full stack solution built in .NET</p>
+
+<Dialog Title="Learn more" Url="@UroboroSettings?.WikipediaUrl">
+    Do you want to
+    <i>learn more</i> about Uroboro?
+    <img src="/images/uroboro.png" alt="uroboro" style="display: block;" />
+    Uroboro is an ancient symbol depicting a serpent or dragon eating its own tail.
+    It is often interpreted as a symbol for eternal cyclic renewal
+    and it means that everything here will always be updated to the latest available version!
+</Dialog>
+
+<SurveyPrompt Title="@UroboroSurveyTitle" />
+
+@code {
+    private UroboroSettings UroboroSettings;
+
+    private string UroboroSurveyTitle = "How is Uroboro working for you?";
+
+    protected override void OnInitialized()
+    {
+        UroboroSettings = UroboroSettingsOptions.Value;
+    }
+}

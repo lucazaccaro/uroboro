@@ -1,0 +1,24 @@
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<UroboroSettings> UroboroSettingsOptions
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+    <span class="text-nowrap">
+        Please take a look at the main
+        <a target="_blank" class="font-weight-bold" href="@UroboroSettings?.RepoUrl">Repo</a>
+    </span>
+    and tell us what you think!
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    private UroboroSettings UroboroSettings;
+
+    protected override void OnInitialized()
+    {
+        UroboroSettings = UroboroSettingsOptions.Value;
+    }
+}

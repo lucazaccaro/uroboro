@@ -1,0 +1,89 @@
+﻿@page "/SignalR"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Configuration
+@using Uroboro.Common.Models; 
+@inject IConfiguration Configuration
+
+<h3>SignalR</h3>
+<p>This component demonstrates sending and retrieving data from a full-duplex channel built with SignalR Core.</p>
+
+<button class="btn btn-sm btn-primary" @onclick="SendMessageWithoutParametersWrapper">Send message without params</button>
+<button class="btn btn-sm btn-primary" @onclick="SendMessageWithParametersWrapper">Send message with params</button>
+<button class="btn btn-sm btn-primary" @onclick="ReceiveParametersWrapper">Receive message with params</button>
+
+@if (messages.Count > 0)
+{
+    <hr />
+    <ul>
+        @foreach (var message in messages)
+        {
+            <li>@message</li>
+        }
+    </ul>
+}
+
+@code {
+    private HubConnection hubConnection;
+    private List<string> messages = new List<string>();
+
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Connect to the Hub
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{Configuration["SignalRUri"]}SampleHub")
+            .Build();
+        // Register callback to handle received messages with one parameter
+        hubConnection.On("GetServerMessage", (string message) =>
+        {
+            messages.Add(message);
+            StateHasChanged();
+        });
+        // Register callback to handle received message with more parameters
+        hubConnection.On("GetServerMessageWithParams", (bool p1, TodoItem item) =>
+        {
+            messages.Add($"Item = [{item.ToString()}], Received = [{p1}]");
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async void SendMessageWithoutParametersWrapper()
+    {
+        if (IsConnected)
+        {
+            await SendMessage();
+        }
+    }
+
+    private async void SendMessageWithParametersWrapper()
+    {
+        if (IsConnected)
+        {
+            await SendMessageWithParam();
+        }
+    }
+
+    private async void ReceiveParametersWrapper()
+    {
+        if (IsConnected)
+        {
+            await SendMessageWithParamInResponse();
+        }
+    }
+
+    Task SendMessageWithParam() => hubConnection.SendAsync("GetClientMessageWithParam", "Blazor");
+    Task SendMessageWithParamInResponse() => hubConnection.SendAsync("SendParamsToClient", "Blazor");
+
+    protected async Task SendMessage()
+    {
+        await hubConnection.SendAsync("GetClientMessage");
+    }
+
+    public void Dispose()
+    {
+        _ = hubConnection.DisposeAsync();
+    }
+}  

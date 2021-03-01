@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="application-name" content="Uroboro" />
+    <meta name="author" content="Luca Zaccaro" />
+    <meta name="description" content="An always-updated full stack solution built in .NET - https://www.lucazaccaro.it" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Uroboro.PL.Blazor</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/loader.css" rel="stylesheet" />
+    <link href="Uroboro.PL.Blazor.styles.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="loader-wrapper">
+            <span class="text-center">
+                <img src="images/uroboro-loader.png" alt="uroboro" style="display: block; margin: 0 auto;" />
+                Loading
+            </span>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script src="scripts/jsinterop.js"></script>
+    <script src="scripts/exampleJsInterop.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+﻿<p>Current count: @currentCount</p>
+<button class="btn btn-sm btn-primary" @onclick="IncrementCount">Click me</button>
+@if (OnClickCallback.HasDelegate)
+{
+    <button class="btn btn-sm btn-primary" style="margin-left: 5px;" @onclick="OnClickCallback">Parent Event (look at VS Output)</button>
+}
+
+@code {
+    private int currentCount = 0;
+
+    [Parameter]
+    public int IncrementAmount { get; set; } = 1;
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+    private void IncrementCount()
+    {
+        currentCount += IncrementAmount;
+    }
+}

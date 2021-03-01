@@ -1,0 +1,117 @@
+﻿@page "/JSInterop"
+@implements IDisposable
+@inject IJSRuntime JS
+
+<h3>JS Interop</h3>
+<p>This component demonstrates interoperation between Javascript and .NET.</p>
+
+<h4>Invoke JavaScript functions from .NET methods</h4>
+
+<button type="button" class="btn btn-sm btn-primary" @onclick="ConvertArray">
+    Convert Array
+</button>
+
+<p class="mt-2" style="font-size:1.6em">
+    <span class="badge badge-success">
+        @convertedText
+    </span>
+</p>
+
+<button type="button" class="btn btn-sm btn-primary" @onclick="TriggerJsPrompt">
+    Trigger JavaScript Prompt
+</button>
+
+<h5 id="welcome" style="color:green;font-style:italic"></h5>
+
+<input @ref="username" />
+
+<h4>Invoke .NET methods from Javascript</h4>
+
+<button type="button" class="btn btn-sm btn-primary" onclick="exampleJsFunctions.returnArrayAsyncJs()">
+    Trigger .NET static method ReturnArrayAsync
+</button>
+
+<button type="button" class="btn btn-sm btn-primary" @onclick="TriggerNetInstanceMethod1">
+    Trigger .NET instance method HelloHelper.SayHello
+</button>
+
+<button type="button" class="btn btn-sm btn-primary" @onclick="TriggerNetInstanceMethod2">
+    Trigger .NET instance method HelloHelper.SayHello 2
+</button>
+
+<p>
+    Message: @message
+</p>
+
+<p>
+    <button class="btn btn-sm btn-primary" onclick="updateMessageCallerJS('Sarah Jane')">Call JS Method</button>
+</p>
+
+@code {
+    private static Action<string> action;
+    private MarkupString convertedText = new MarkupString("Select the <b>Convert Array</b> button.");
+    private string message = "Select the button.";
+    private DotNetObjectReference<HelloHelper> objRef;
+    private uint[] quoteArray = new uint[]
+    {
+        60, 101, 109, 62, 67, 97, 110, 39, 116, 32, 115, 116, 111, 112, 32,
+        116, 104, 101, 32, 115, 105, 103, 110, 97, 108, 44, 32, 77, 97,
+        108, 46, 60, 47, 101, 109, 62, 32, 45, 32, 77, 114, 46, 32, 85, 110,
+        105, 118, 101, 114, 115, 101, 10, 10
+    };
+    private ElementReference username;
+
+    [JSInvokable]
+    public static Task<int[]> ReturnArrayAsync()
+    {
+        return Task.FromResult(new int[] { 1, 2, 3 });
+    }
+
+    [JSInvokable]
+    public static void UpdateMessageCaller(string name)
+    {
+        action.Invoke(name);
+    }
+
+    protected override void OnInitialized()
+    {
+        action = UpdateMessage;
+    }
+
+    private async Task ConvertArray()
+    {
+        var text = await JS.InvokeAsync<string>("convertArray", quoteArray);
+        convertedText = new MarkupString(text);
+    }
+
+    public async Task TriggerJsPrompt()
+    {
+        await JS.InvokeVoidAsync("exampleJsFunctions.focusElement", username);
+        await JSRuntimeExtensions.InvokeVoidAsync(JS, "exampleJsFunctions.alertVoid");
+        var name = await JS.InvokeAsync<string>("exampleJsFunctions.showPrompt", "What's your name?");
+        await JS.InvokeVoidAsync("exampleJsFunctions.displayWelcome", $"Hello {name}! Welcome to Blazor!");
+    }
+
+    public async Task TriggerNetInstanceMethod1()
+    {
+        var exampleJsInterop = new JsInteropHelper(JS);
+        await exampleJsInterop.CallHelloHelperSayHello("Blazor");
+    }
+
+    public async Task TriggerNetInstanceMethod2()
+    {
+        objRef = DotNetObjectReference.Create(new HelloHelper("Blazor"));
+        await JS.InvokeAsync<string>("exampleJsFunctions.sayHello", objRef);
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
+    }
+
+    private void UpdateMessage(string name)
+    {
+        message = $"{name}, UpdateMessage Called!";
+        StateHasChanged();
+    }
+}

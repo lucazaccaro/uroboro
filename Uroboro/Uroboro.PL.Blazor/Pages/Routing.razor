@@ -1,0 +1,58 @@
+﻿@page "/Routing/{Id:int}/{Route?}"
+@inject NavigationManager NavigationManager
+
+<h3>Routing</h3>
+<p>This component demonstrates Routing features.</p>
+
+<button class="btn btn-sm btn-primary" @onclick="ReloadWithMandatoryParameters">Reload with mandatory parameters</button>
+<button class="btn btn-sm btn-primary" @onclick="ReloadWithAllParameters">Reload with all parameters</button>
+
+<hr />
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Key</th>
+            <th style="width: 50%;">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Id:</td>
+            <td>@Id</td>
+        </tr>
+        <tr>
+            <td>Route:</td>
+            <td>@Route</td>
+        </tr>
+    </tbody>
+</table>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public string Route { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Route = Route ?? "no-route-param-on-initialized";
+    }
+
+    protected override void OnParametersSet()
+    {
+        Route = Route ?? "no-route-param-on-parameters-set";
+    }
+
+    private void ReloadWithMandatoryParameters()
+    {
+        NavigationManager.NavigateTo("Routing/2");
+    }
+
+    private void ReloadWithAllParameters()
+    {
+        NavigationManager.NavigateTo("Routing/3/Button");
+    }
+}

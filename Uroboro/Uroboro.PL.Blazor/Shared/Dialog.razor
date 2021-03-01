@@ -1,0 +1,25 @@
+﻿@inject NavigationManager NavManager
+
+<div class="card" style="width:30rem">
+    <div class="card-body">
+        <h3 class="card-title">@Title</h3>
+        <p class="card-text">@ChildContent</p>
+        <button class="btn btn-primary" @onclick="OnYes">Yes please!</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Url { get; set; }
+
+    private void OnYes()
+    {
+        NavManager.NavigateTo($"{Url}", forceLoad: true);
+    }
+}
