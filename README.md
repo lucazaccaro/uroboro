@@ -30,7 +30,7 @@ Other things that may come at a later stage are:
 - [ ] A .NET 5+ project to write gRPC Services
 - [ ] Other Frontend alternatives in Angular, React and Vue
 - [ ] Better microservices architecture patterns
-- [ ] Some sort of Azure integration
+- [x] Some sort of Azure integration
 - [ ] Some sort of GitHub CI/CD integration
 
 ## Contributions
